@@ -1,0 +1,5 @@
+scons -j10 platform=windows tools=yes bits=32
+scons -j10 platform=windows tools=no target=release_debug bits=32
+scons -j10 platform=windows tools=no target=release bits=32
+scons -j10 platform=windows tools=no target=release_debug bits=64
+scons -j10 platform=windows tools=no target=release bits=64
