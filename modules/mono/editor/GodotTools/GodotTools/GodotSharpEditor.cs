@@ -9,6 +9,7 @@ using System.Linq;
 using GodotTools.Build;
 using GodotTools.Ides;
 using GodotTools.Ides.Rider;
+using GodotTools.Ides.Consulo;
 using GodotTools.Internals;
 using GodotTools.ProjectEditor;
 using JetBrains.Annotations;
@@ -236,6 +237,12 @@ namespace GodotTools
                 {
                     string scriptPath = ProjectSettings.GlobalizePath(script.ResourcePath);
                     RiderPathManager.OpenFile(GodotSharpDirs.ProjectSlnPath, scriptPath, line);
+                    return Error.Ok;
+                }
+                case ExternalEditorId.Consulo:
+                {
+                    string scriptPath = ProjectSettings.GlobalizePath(script.ResourcePath);
+                    ConsuloPathManager.OpenFile(GodotSharpDirs.ProjectSlnPath, scriptPath, line);
                     return Error.Ok;
                 }
                 case ExternalEditorId.MonoDevelop:
@@ -491,7 +498,8 @@ namespace GodotTools
                 settingsHintStr += $",Visual Studio:{(int)ExternalEditorId.VisualStudio}" +
                                    $",MonoDevelop:{(int)ExternalEditorId.MonoDevelop}" +
                                    $",Visual Studio Code:{(int)ExternalEditorId.VsCode}" +
-                                   $",JetBrains Rider:{(int)ExternalEditorId.Rider}";
+                                   $",JetBrains Rider:{(int)ExternalEditorId.Rider}" +
+                                   $",Consulo:{(int)ExternalEditorId.Consulo}";
             }
             else if (OS.IsMacOS)
             {
@@ -499,12 +507,14 @@ namespace GodotTools
                                    $",MonoDevelop:{(int)ExternalEditorId.MonoDevelop}" +
                                    $",Visual Studio Code:{(int)ExternalEditorId.VsCode}" +
                                    $",JetBrains Rider:{(int)ExternalEditorId.Rider}";
+                                   $",Consulo:{(int)ExternalEditorId.Consulo}";
             }
             else if (OS.IsUnixLike)
             {
                 settingsHintStr += $",MonoDevelop:{(int)ExternalEditorId.MonoDevelop}" +
                                    $",Visual Studio Code:{(int)ExternalEditorId.VsCode}" +
                                    $",JetBrains Rider:{(int)ExternalEditorId.Rider}";
+                                   $",Consulo:{(int)ExternalEditorId.Consulo}";
             }
 
             _editorSettings.AddPropertyInfo(new Godot.Collections.Dictionary
@@ -546,6 +556,7 @@ namespace GodotTools
 
             BuildManager.Initialize();
             RiderPathManager.Initialize();
+            ConsuloPathManager.Initialize();
 
             GodotIdeManager = new GodotIdeManager();
             AddChild(GodotIdeManager);
